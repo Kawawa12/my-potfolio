@@ -157,11 +157,11 @@ export default function Projects() {
                   <div className="flex items-start justify-between mb-3">
                     <motion.h3 
                       className="text-2xl font-bold text-gray-900 dark:text-white transition-all duration-300"
+                      style={{ WebkitBackgroundClip: "text" }}
                       whileHover={{ 
                         scale: 1.02,
                         background: "linear-gradient(135deg, #06b6d4, #a78bfa)",
                         backgroundClip: "text",
-                        WebkitBackgroundClip: "text",
                         color: "transparent",
                       }}
                     >

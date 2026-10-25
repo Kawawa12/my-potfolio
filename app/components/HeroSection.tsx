@@ -9,7 +9,7 @@ const ROLES = [
   "Full-Stack Engineer",
   "Mobile Developer",
   "API Architect",
-  "Open Source Builder",
+  "REST API Design and Integration",
 ];
 
 export default function HeroSection() {
@@ -71,6 +71,7 @@ export default function HeroSection() {
     let id: number;
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.shadowBlur = 0;
       pts.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -78,7 +79,7 @@ export default function HeroSection() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34,211,238,${p.a})`;
+        ctx.fillStyle = `rgba(94,234,212,${p.a * 0.45})`;
         ctx.fill();
       });
       for (let i = 0; i < pts.length; i++) {
@@ -89,7 +90,7 @@ export default function HeroSection() {
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(34,211,238,${0.07 * (1 - dist / 130)})`;
+            ctx.strokeStyle = `rgba(94,234,212,${0.04 * (1 - dist / 130)})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -105,7 +106,7 @@ export default function HeroSection() {
   }, []);
 
   const socials = [
-    { icon: <FiGithub size={17} />, href: "https://github.com", label: "GitHub" },
+    { icon: <FiGithub size={17} />, href: "https://github.com/Kawawa12", label: "GitHub" },
     { icon: <FaLinkedinIn size={17} />, href: "https://linkedin.com", label: "LinkedIn" },
     { icon: <FaTwitter size={17} />, href: "https://twitter.com", label: "Twitter" },
     { icon: <FiMail size={17} />, href: "mailto:jacksonkawawa31@gmail.com", label: "Email" },
@@ -124,48 +125,31 @@ export default function HeroSection() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Tag pill */}
-            <motion.div 
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-7"
-              animate={{ boxShadow: ["0 0 0px #22d3ee", "0 0 20px #22d3ee", "0 0 0px #22d3ee"] }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <div
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--accent-glow)/0.08)] border border-[hsl(var(--accent-glow)/0.2)] mb-7"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              <span className="font-mono text-[0.7rem] text-cyan-400 tracking-wider">Available for opportunities</span>
-            </motion.div>
+              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--accent-glow))]" />
+              <span className="font-mono text-[0.7rem] text-[hsl(var(--accent-glow))] tracking-wider">Available for opportunities</span>
+            </div>
 
             {/* Animated scrolling name */}
-            <div className="overflow-hidden mb-4">
-              <motion.h1 
-                className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tighter whitespace-nowrap"
-                animate={{ 
-                  x: ["0%", "-100%"],
-                }}
-                transition={{ 
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "linear",
-                  repeatType: "loop"
-                }}
-              >
+            <div className="mb-4">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
                 <span className="gradient-text">JACKSON KAWAWA</span>
-                <span className="gradient-text mx-8">✦</span>
-                <span className="gradient-text">JACKSON KAWAWA</span>
-                <span className="gradient-text mx-8">✦</span>
-                <span className="gradient-text">JACKSON KAWAWA</span>
-              </motion.h1>
+              </h1>
             </div>
 
             {/* Typewriter */}
             <div className="h-8 flex items-center gap-1.5 mb-6">
               <span className="font-mono text-sm sm:text-base text-gray-500 dark:text-gray-400">~/</span>
               <span ref={roleRef} className="font-mono text-sm sm:text-base font-semibold gradient-text-cv" />
-              <span className="font-mono text-cyan-400 text-base animate-pulse">▊</span>
+              <span className="font-mono text-[hsl(var(--accent-glow))] text-base animate-pulse">▊</span>
             </div>
 
             {/* Description */}
             <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-lg mb-10 leading-relaxed">
-              I build <span className="text-cyan-500 font-semibold">scalable REST APIs</span>, 
-              reactive UIs, and <span className="text-purple-500 font-semibold">cross-platform mobile apps</span> 
+              I build <span className="text-[hsl(var(--accent-glow))] font-semibold">scalable REST APIs</span>,
+              reactive UIs, and <span className="text-[hsl(var(--accent-glow))] font-semibold">cross-platform mobile apps</span>
               — from database to deployment.
             </p>
 
@@ -196,7 +180,7 @@ export default function HeroSection() {
                   aria-label={s.label}
                   whileHover={{ y: -3, scale: 1.1 }}
                   whileTap={{ scale: 0.92 }}
-                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--surface)] border border-[var(--border)] text-gray-500 dark:text-gray-400 hover:border-cyan-500 hover:text-cyan-500 hover:shadow-[0_0_14px_var(--cyan-glow)] transition-all"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--surface)] border border-[hsl(var(--border))] text-gray-500 dark:text-gray-400 hover:border-[hsl(var(--accent-glow))] hover:text-[hsl(var(--accent-glow))] transition-colors"
                 >
                   {s.icon}
                 </motion.a>

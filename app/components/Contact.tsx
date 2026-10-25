@@ -65,70 +65,57 @@ export default function Contact() {
               {/* Email Contact */}
               <motion.a 
                 href="mailto:jacksonkawawa31@gmail.com"
-                animate={{ 
-                  boxShadow: [
-                    "0 0 10px rgba(6, 182, 212, 0.3)",
-                    "0 0 20px rgba(139, 92, 246, 0.5)",
-                    "0 0 10px rgba(6, 182, 212, 0.3)"
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 
-                         border-2 border-cyan-500/50 transition-all cursor-pointer group"
+                whileHover={{ x: 4 }}
+                className="group flex items-center gap-4 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--accent-glow)/0.5)]"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20">
-                  <FiMail className="w-5 h-5 text-cyan-500" />
+                <div className="rounded-full bg-[hsl(var(--accent-glow)/0.1)] p-3">
+                  <FiMail className="h-5 w-5 text-[hsl(var(--accent-glow))]" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
-                  <p className="font-medium group-hover:text-cyan-500 transition-colors">jacksonkawawa31@gmail.com</p>
+                  <p className="text-sm text-[hsl(var(--text-3))]">Email</p>
+                  <p className="font-medium transition-colors group-hover:text-[hsl(var(--accent-glow))]">jacksonkawawa31@gmail.com</p>
                 </div>
               </motion.a>
               
               {/* Phone Contact */}
               <motion.a 
                 href="tel:+255764752364"
-                animate={{ 
-                  boxShadow: [
-                    "0 0 10px rgba(139, 92, 246, 0.3)",
-                    "0 0 20px rgba(6, 182, 212, 0.5)",
-                    "0 0 10px rgba(139, 92, 246, 0.3)"
-                  ]
-                }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-                whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 
-                         border-2 border-purple-500/50 transition-all cursor-pointer group"
+                whileHover={{ x: 4 }}
+                className="group flex items-center gap-4 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--accent-glow)/0.5)]"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20">
-                  <FiPhone className="w-5 h-5 text-purple-500" />
+                <div className="rounded-full bg-[hsl(var(--accent-glow)/0.1)] p-3">
+                  <FiPhone className="h-5 w-5 text-[hsl(var(--accent-glow))]" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Phone / WhatsApp</p>
-                  <p className="font-medium group-hover:text-purple-500 transition-colors">+255 764 752 364</p>
+                  <p className="text-sm text-[hsl(var(--text-3))]">Phone / WhatsApp</p>
+                  <p className="font-medium transition-colors group-hover:text-[hsl(var(--accent-glow))]">+255 764 752 364</p>
                 </div>
               </motion.a>
               
-              {/* Location */}
-              <motion.div 
-                animate={{ 
-                  boxShadow: [
-                    "0 0 10px rgba(236, 72, 153, 0.3)",
-                    "0 0 20px rgba(139, 92, 246, 0.5)",
-                    "0 0 10px rgba(236, 72, 153, 0.3)"
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-                whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/50 
-                         border-2 border-pink-500/50 transition-all cursor-pointer"
+              <motion.a
+                href="tel:+255789746295"
+                whileHover={{ x: 4 }}
+                className="group flex items-center gap-4 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--accent-glow)/0.5)]"
               >
-                <div className="p-3 rounded-full bg-gradient-to-br from-pink-500/20 to-cyan-500/20">
-                  <FiMapPin className="w-5 h-5 text-pink-500" />
+                <div className="rounded-full bg-[hsl(var(--accent-glow)/0.1)] p-3">
+                  <FiPhone className="h-5 w-5 text-[hsl(var(--accent-glow))]" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Location</p>
+                  <p className="text-sm text-[hsl(var(--text-3))]">Normal call</p>
+                  <p className="font-medium transition-colors group-hover:text-[hsl(var(--accent-glow))]">+255 789 746 295</p>
+                </div>
+              </motion.a>
+
+              {/* Location */}
+              <motion.div
+                whileHover={{ x: 4 }}
+                className="flex items-center gap-4 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--accent-glow)/0.5)]"
+              >
+                <div className="rounded-full bg-[hsl(var(--accent-glow)/0.1)] p-3">
+                  <FiMapPin className="h-5 w-5 text-[hsl(var(--accent-glow))]" />
+                </div>
+                <div>
+                  <p className="text-sm text-[hsl(var(--text-3))]">Location</p>
                   <p className="font-medium">Tanzania</p>
                 </div>
               </motion.div>
@@ -147,11 +134,9 @@ export default function Contact() {
             <div>
               <label className="block text-sm font-medium mb-2">Name</label>
               <motion.input
-                whileFocus={{ scale: 1.02 }}
                 type="text"
                 required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 
-                         focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 transition-colors focus:border-[hsl(var(--accent-glow))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-glow)/0.15)]"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
@@ -160,11 +145,9 @@ export default function Contact() {
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
               <motion.input
-                whileFocus={{ scale: 1.02 }}
                 type="email"
                 required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 
-                         focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 transition-colors focus:border-[hsl(var(--accent-glow))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-glow)/0.15)]"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />
@@ -173,11 +156,9 @@ export default function Contact() {
             <div>
               <label className="block text-sm font-medium mb-2">Message</label>
               <motion.textarea
-                whileFocus={{ scale: 1.02 }}
                 rows={5}
                 required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 
-                         focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all resize-none"
+                className="w-full resize-none rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 transition-colors focus:border-[hsl(var(--accent-glow))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-glow)/0.15)]"
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               />
@@ -192,18 +173,9 @@ export default function Contact() {
             <motion.button
               type="submit"
               disabled={isLoading}
-              whileHover={{ scale: 1.05, y: -2 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
-              animate={{ 
-                boxShadow: [
-                  "0 0 10px rgba(6, 182, 212, 0.5)",
-                  "0 0 20px rgba(139, 92, 246, 0.7)",
-                  "0 0 10px rgba(6, 182, 212, 0.5)"
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="group relative w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500
-                       text-white font-semibold overflow-hidden cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full overflow-hidden rounded-xl bg-[hsl(var(--accent-glow))] py-4 font-semibold text-white transition-colors hover:bg-[hsl(var(--accent-secondary))] disabled:cursor-not-allowed disabled:opacity-50"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {isLoading ? (
@@ -217,8 +189,6 @@ export default function Contact() {
                   </>
                 )}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent 
-                            -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
             </motion.button>
             
             <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-4">

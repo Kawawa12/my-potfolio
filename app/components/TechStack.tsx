@@ -4,86 +4,81 @@ import { motion } from "framer-motion";
 import { 
   SiSpringboot, SiExpress, SiFastapi, SiDjango,
   SiAngular, SiReact, SiVuedotjs, SiRedux,
-  SiFlutter, SiKotlin,
+  SiFlutter,
   SiJavascript, SiPython, SiTypescript,
   SiTailwindcss, SiNextdotjs, SiNodedotjs,
-  SiGit, SiDocker, SiMongodb, SiPostgresql, SiMysql,
-  SiGraphql, SiFirebase, SiRedis
+  SiGit, SiDocker, SiMongodb, SiPostgresql, SiMysql
 } from "react-icons/si";
-import { FaJava, FaTools } from "react-icons/fa";
-import { RiMindMap, RiDatabase2Line } from "react-icons/ri";
-import { TbApi, TbBrandReactNative } from "react-icons/tb";
+import { FaJava } from "react-icons/fa";
+import { RiMindMap } from "react-icons/ri";
 
 const techCategories = [
   {
     title: "Backend Stack",
     icon: "⚙️",
     technologies: [
-      { name: "Spring Boot", icon: SiSpringboot, color: "#6DB33F" },
-      { name: "Express.js", icon: SiExpress, color: "#000000" },
-      { name: "FastAPI", icon: SiFastapi, color: "#009688" },
-      { name: "Django", icon: SiDjango, color: "#092E20" },
-      { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+      { name: "Spring Boot", icon: SiSpringboot },
+      { name: "Express.js", icon: SiExpress },
+      { name: "FastAPI", icon: SiFastapi },
+      { name: "Django", icon: SiDjango },
+      { name: "Node.js", icon: SiNodedotjs },
     ]
   },
   {
     title: "Frontend Stack",
     icon: "🎨",
     technologies: [
-      { name: "Angular", icon: SiAngular, color: "#DD0031" },
-      { name: "React", icon: SiReact, color: "#61DAFB" },
-      { name: "Next.js", icon: SiNextdotjs, color: "#000000" },
-      { name: "Vue.js", icon: SiVuedotjs, color: "#4FC08D" },
-      { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+      { name: "Angular", icon: SiAngular },
+      { name: "React", icon: SiReact },
+      { name: "Next.js", icon: SiNextdotjs },
+      { name: "Vue.js", icon: SiVuedotjs },
+      { name: "Tailwind CSS", icon: SiTailwindcss },
     ]
   },
   {
     title: "Mobile Stack",
     icon: "📱",
     technologies: [
-      { name: "Flutter", icon: SiFlutter, color: "#02569B" },
-      { name: "React Native", icon: SiReact, color: "#61DAFB" },
-      { name: "Kotlin", icon: SiKotlin, color: "#7F52FF" },
+      { name: "Flutter", icon: SiFlutter },
+      { name: "React Native", icon: SiReact },
+      { name: "Java", icon: FaJava },
     ]
   },
   {
     title: "Languages",
     icon: "💻",
     technologies: [
-      { name: "Java", icon: FaJava, color: "#007396" },
-      { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
-      { name: "Python", icon: SiPython, color: "#3776AB" },
+      { name: "Java", icon: FaJava },
+      { name: "JavaScript", icon: SiJavascript },
+      { name: "TypeScript", icon: SiTypescript },
+      { name: "Python", icon: SiPython },
     ]
   },
   {
     title: "State Management",
     icon: "🔄",
     technologies: [
-      { name: "Redux Toolkit", icon: SiRedux, color: "#764ABC" },
-      { name: "Zustand", icon: RiMindMap, color: "#E65100" },
-      { name: "Context API", icon: SiReact, color: "#61DAFB" },
+      { name: "Redux Toolkit", icon: SiRedux },
+      { name: "Zustand", icon: RiMindMap },
+      { name: "Context API", icon: SiReact },
     ]
   },
   {
     title: "Database & Tools",
     icon: "🗄️",
     technologies: [
-      { name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
-      { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-      { name: "MySQL", icon: SiMysql, color: "#4479A1" },
-      { name: "Redis", icon: SiRedis, color: "#DC382D" },
-      { name: "GraphQL", icon: SiGraphql, color: "#E10098" },
-      { name: "Firebase", icon: SiFirebase, color: "#FFCA28" },
+      { name: "PostgreSQL", icon: SiPostgresql },
+      { name: "MongoDB", icon: SiMongodb },
+      { name: "MySQL", icon: SiMysql },
     ]
   },
   {
     title: "DevOps & Tools",
     icon: "🔧",
     technologies: [
-      { name: "Git", icon: SiGit, color: "#F05032" },
-      { name: "Docker", icon: SiDocker, color: "#2496ED" },
-      { name: "Postman", icon: SiFastapi, color: "#FF6C37" },
+      { name: "Git", icon: SiGit },
+      { name: "Docker", icon: SiDocker },
+      { name: "Postman", icon: SiFastapi },
     ]
   }
 ];
@@ -116,64 +111,15 @@ export default function TechStack() {
               className="group"
             >
               <motion.div
-                // Continuous glow animation
-                animate={{ 
-                  boxShadow: [
-                    "0 0 10px rgba(6, 182, 212, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)",
-                    "0 0 20px rgba(6, 182, 212, 0.6), 0 0 30px rgba(139, 92, 246, 0.4)",
-                    "0 0 10px rgba(6, 182, 212, 0.3), 0 0 20px rgba(139, 92, 246, 0.2)"
-                  ]
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                // Hover transition
-                whileHover={{ 
-                  scale: 1.05,
-                  y: -8,
-                  boxShadow: "0 0 40px rgba(6, 182, 212, 0.8), 0 0 60px rgba(139, 92, 246, 0.6)",
-                  transition: { 
-                    type: "spring", 
-                    stiffness: 300,
-                    damping: 20,
-                    duration: 0.4 
-                  }
-                }}
-                className="relative bg-gradient-to-br from-[hsl(var(--card))] to-[hsl(var(--muted))] 
-                          rounded-2xl p-8 border-2 border-[hsl(var(--accent-glow)/0.3)] 
-                          transition-all duration-300 shadow-lg overflow-hidden cursor-pointer"
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.2 }}
+                className="relative rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-8 shadow-sm transition-shadow hover:shadow-lg"
               >
-                {/* Animated border gradient flowing */}
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent 
-                            -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
-                  animate={{ 
-                    background: [
-                      "linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent)",
-                      "linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)",
-                      "linear-gradient(90deg, transparent, rgba(236,72,153,0.3), transparent)",
-                      "linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent)"
-                    ]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity }}
-                />
-                
-                {/* Inner glow on hover */}
-                <motion.div 
-                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[hsl(var(--accent-glow)/0.05)] to-[hsl(var(--accent-secondary)/0.05)] 
-                            opacity-0 transition-opacity duration-500"
-                  whileHover={{ opacity: 1 }}
-                />
-
-                <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-6">
-                    <motion.span 
-                      className="text-3xl"
-                      animate={{ rotate: [0, 5, -5, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      whileHover={{ rotate: 360, scale: 1.2 }}
-                    >
+                    <span className="text-2xl opacity-70">
                       {category.icon}
-                    </motion.span>
-                    <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+                    </span>
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))]">
                       {category.title}
                     </h3>
                   </div>
@@ -184,37 +130,16 @@ export default function TechStack() {
                       return (
                         <motion.div
                           key={techIdx}
-                          whileHover={{ 
-                            scale: 1.08, 
-                            x: 8, 
-                            y: -5,
-                            transition: { type: "spring", stiffness: 400, duration: 0.3 }
-                          }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-3 p-3 rounded-xl bg-[hsl(var(--background)/0.5)] 
-                                    border border-[hsl(var(--border))] hover:border-cyan-500
-                                    transition-all duration-300 group/tech cursor-pointer"
+                          whileHover={{ x: 3 }}
+                          transition={{ duration: 0.18 }}
+                          className="flex items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-3 transition-colors hover:border-[hsl(var(--accent-glow)/0.5)]"
                         >
-                          <motion.div
-                            animate={{ rotate: [0, 360] }}
-                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                            whileHover={{ rotate: 360, transition: { duration: 0.5 } }}
-                          >
-                            <IconComponent className="w-6 h-6" style={{ color: tech.color }} />
-                          </motion.div>
+                          <IconComponent className="h-5 w-5 text-[hsl(var(--accent-glow))]" />
                           <span className="font-medium text-sm">{tech.name}</span>
-                          <motion.div 
-                            className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 opacity-0 
-                                      transition-opacity"
-                            animate={{ scale: [1, 1.5, 1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                            whileHover={{ opacity: 1 }}
-                          />
                         </motion.div>
                       );
                     })}
                   </div>
-                </div>
               </motion.div>
             </motion.div>
           ))}

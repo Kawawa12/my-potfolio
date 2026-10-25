@@ -5,12 +5,10 @@ import HeroSection from "./components/HeroSection";
 import TechStack from "./components/TechStack";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
-import RainEffect from "./components/RainEffect";
 
 export default function Home() {
   return (
     <main className="min-h-screen relative">
-      <RainEffect />
       <ThemeToggle />
       <HeroSection />
       <TechStack />

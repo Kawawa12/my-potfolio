@@ -4,37 +4,33 @@
 
 @layer base {
   :root {
-    --background: 40 33% 98%;
-    --foreground: 20 14% 4%;
-    --card: 40 33% 100%;
-    --card-foreground: 20 14% 4%;
-    --border: 30 10% 85%;
-    --accent-glow: 25 95% 53%;
-    --accent-secondary: 190 90% 42%;
-    --muted: 40 20% 92%;
-    --cyan: #06b6d4;
-    --cyan-glow: rgba(6, 182, 212, 0.5);
-    --violet: #8b5cf6;
-    --text-2: #4a4a4a;
-    --text-3: #6b6b6b;
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+    --border: 214 18% 88%;
+    --accent-glow: 174 72% 34%;
+    --accent-secondary: 174 64% 42%;
+    --muted: 210 18% 94%;
+    --cyan: #0f766e;
+    --text-2: 215 16% 35%;
+    --text-3: 215 16% 47%;
     --surface: #ffffff;
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 40 20% 92%;
-    --card: 222 47% 8%;
-    --card-foreground: 40 20% 92%;
-    --border: 222 30% 20%;
-    --accent-glow: 25 95% 63%;
-    --accent-secondary: 190 80% 55%;
-    --muted: 222 30% 15%;
-    --cyan: #22d3ee;
-    --cyan-glow: rgba(34, 211, 238, 0.4);
-    --violet: #a78bfa;
-    --text-2: #b0b0b0;
-    --text-3: #8a8a8a;
-    --surface: #1e293b;
+    --background: 222 28% 10%;
+    --foreground: 210 20% 94%;
+    --card: 222 25% 13%;
+    --card-foreground: 210 20% 94%;
+    --border: 218 18% 24%;
+    --accent-glow: 174 66% 48%;
+    --accent-secondary: 174 58% 55%;
+    --muted: 220 22% 17%;
+    --cyan: #5eead4;
+    --text-2: 214 20% 82%;
+    --text-3: 215 18% 65%;
+    --surface: #1b2432;
   }
 }
 
@@ -48,28 +44,18 @@
   50% { transform: translateY(-8px); }
 }
 
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 .gradient-text {
-  background: linear-gradient(135deg, #22d3ee, #a78bfa, #f472b6);
-  background-size: 200% 200%;
+  background: linear-gradient(135deg, hsl(var(--accent-glow)), hsl(var(--accent-secondary)));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gradientFlow 3s ease infinite;
 }
 
 .gradient-text-cv {
-  background: linear-gradient(135deg, #22d3ee, #a78bfa);
-  background-size: 200% 200%;
+  background: linear-gradient(135deg, hsl(var(--accent-glow)), hsl(var(--accent-secondary)));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: gradientFlow 4s ease infinite;
 }
 
 .btn-primary {
@@ -82,14 +68,14 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, gap 0.2s ease;
   border: none;
   cursor: pointer;
 }
 
 .btn-primary:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 25px hsl(var(--accent-glow) / 0.5);
+  box-shadow: 0 8px 20px hsl(var(--accent-glow) / 0.18);
   gap: 12px;
 }
 
@@ -99,16 +85,15 @@
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--text-2);
-  border: 1px solid var(--border);
+  color: hsl(var(--text-2));
+  border: 1px solid hsl(var(--border));
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .btn-ghost:hover {
   border-color: var(--cyan);
   color: var(--cyan);
-  transform: scale(1.02);
 }
 
 .font-mono {
@@ -118,6 +103,7 @@
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 ::-webkit-scrollbar {
@@ -130,14 +116,25 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--accent-glow));
+  background: hsl(var(--border));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent-secondary));
+  background: hsl(var(--accent-glow));
 }
 
 * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -11,12 +11,12 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background)/0.9)] backdrop-blur-lg">
       <div className="mx-auto flex min-h-14 max-w-7xl flex-wrap items-center justify-between gap-x-4 px-4 sm:px-6 lg:px-8">
-        <a
+        {/* <a
           href="#about"
           className="text-base font-bold tracking-tight text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--accent-glow))]"
         >
           Jackson Kawawa
-        </a>
+        </a> */}
 
         <nav
           aria-label="Main navigation"

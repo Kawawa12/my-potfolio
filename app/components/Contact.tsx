@@ -192,7 +192,7 @@ export default function Contact() {
             </motion.button>
             
             <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-4">
-              Messages will open in your email client. I'll respond within 24 hours.
+              Let's Connect with Technologies 
             </p>
           </motion.form>
         </div>

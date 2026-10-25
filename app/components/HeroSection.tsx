@@ -1,212 +1,415 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { FiGithub, FiMail, FiArrowDown } from "react-icons/fi";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { FiGithub, FiMail, FiArrowDown, FiArrowRight } from "react-icons/fi";
 import { FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import ProfileImage from "./ProfileImage";
 
+/* ------------------------------------------------------------------ */
+/* Content – edit here, no need to touch the JSX below                 */
+/* ------------------------------------------------------------------ */
 const ROLES = [
   "Full-Stack Engineer",
   "Mobile Developer",
   "API Architect",
-  "REST API Design and Integration",
+  "REST API Design & Integration",
 ];
 
+// TODO: replace the LinkedIn and Twitter URLs with your real profile links.
+// Right now they open the sites' home pages, which is a dead end for visitors.
+const SOCIALS = [
+  {
+    label: "GitHub",
+    href: "https://github.com/Kawawa12",
+    icon: FiGithub,
+    external: true,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com",
+    icon: FaLinkedinIn,
+    external: true,
+  },
+  {
+    label: "Twitter",
+    href: "https://twitter.com",
+    icon: FaTwitter,
+    external: true,
+  },
+  {
+    label: "Email",
+    href: "mailto:jacksonkawawa31@gmail.com",
+    icon: FiMail,
+    external: false,
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* Shared styles                                                       */
+/* ------------------------------------------------------------------ */
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent-glow))] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
+/* One staggered entrance for the whole text column (the only "page-load" motion) */
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } },
+};
+const item: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const roleRef = useRef<HTMLSpanElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
+  // True only while the hero is on screen AND the browser tab is visible.
+  // Both animations check this so they don't burn CPU/battery in the background.
+  const activeRef = useRef(true);
+
+  /* ---------- Pause animations when off-screen or tab hidden ---------- */
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    let inView = true;
+    const update = () => {
+      activeRef.current = inView && !document.hidden;
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        update();
+      },
+      { threshold: 0.05 },
+    );
+    observer.observe(el);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
+
+  /* ---------- Typewriter ---------- */
+  useEffect(() => {
+    const el = roleRef.current;
+    if (!el) return;
+
+    // Reduced motion: show one static role, no typing.
     if (prefersReducedMotion) {
-      if (roleRef.current) roleRef.current.textContent = ROLES[0];
+      el.textContent = ROLES[0];
       return;
     }
 
-    let roleIdx = 0, charIdx = 0, deleting = false, timeout: ReturnType<typeof setTimeout>;
-    const type = () => {
+    let roleIdx = 0;
+    let charIdx = 0;
+    let deleting = false;
+    let timeout: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      if (!activeRef.current) {
+        timeout = setTimeout(tick, 400);
+        return;
+      }
       const word = ROLES[roleIdx];
-      const el = roleRef.current;
-      if (!el) return;
+
       if (!deleting) {
-        el.textContent = word.slice(0, charIdx + 1);
         charIdx++;
+        el.textContent = word.slice(0, charIdx);
         if (charIdx === word.length) {
           deleting = true;
-          timeout = setTimeout(type, 1800);
+          timeout = setTimeout(tick, 1800); // hold the full word so it can be read
           return;
         }
       } else {
-        el.textContent = word.slice(0, charIdx - 1);
         charIdx--;
+        el.textContent = word.slice(0, charIdx);
         if (charIdx === 0) {
           deleting = false;
           roleIdx = (roleIdx + 1) % ROLES.length;
         }
       }
-      timeout = setTimeout(type, deleting ? 45 : 80);
+      timeout = setTimeout(tick, deleting ? 40 : 75);
     };
-    timeout = setTimeout(type, 600);
+
+    timeout = setTimeout(tick, 600);
     return () => clearTimeout(timeout);
   }, [prefersReducedMotion]);
 
+  /* ---------- Particle background ---------- */
   useEffect(() => {
     if (prefersReducedMotion) return;
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    
+    const parent = canvas?.parentElement;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !parent || !ctx) return;
+
+    type Particle = {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      r: number;
+      a: number;
+    };
+    let width = 0;
+    let height = 0;
+    let particles: Particle[] = [];
+
+    const seed = () => {
+      // Fewer particles on small screens: cleaner and lighter.
+      const count = width < 640 ? 28 : 55;
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.5 + 0.4,
+        a: Math.random() * 0.45 + 0.1,
+      }));
+    };
+
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // crisp on retina, capped for speed
+      width = parent.clientWidth;
+      height = parent.clientHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (particles.length === 0) seed();
     };
     resize();
-    window.addEventListener("resize", resize);
 
-    const pts = Array.from({ length: 55 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 1.5 + 0.4,
-      a: Math.random() * 0.45 + 0.1,
-    }));
+    const ro = new ResizeObserver(resize);
+    ro.observe(parent);
 
-    let id: number;
+    let id = 0;
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.shadowBlur = 0;
-      pts.forEach((p) => {
+      id = requestAnimationFrame(draw);
+      if (!activeRef.current) return;
+
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(94,234,212,${p.a * 0.45})`;
         ctx.fill();
-      });
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-          const dist = Math.hypot(dx, dy);
+      }
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dist = Math.hypot(
+            particles[i].x - particles[j].x,
+            particles[i].y - particles[j].y,
+          );
           if (dist < 130) {
             ctx.beginPath();
-            ctx.moveTo(pts[i].x, pts[i].y);
-            ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(94,234,212,${0.04 * (1 - dist / 130)})`;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(94,234,212,${0.05 * (1 - dist / 130)})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
         }
       }
-      id = requestAnimationFrame(draw);
     };
-    draw();
+    id = requestAnimationFrame(draw);
+
     return () => {
       cancelAnimationFrame(id);
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
     };
   }, [prefersReducedMotion]);
 
-  const socials = [
-    { icon: <FiGithub size={17} />, href: "https://github.com/Kawawa12", label: "GitHub", external: true },
-    { icon: <FaLinkedinIn size={17} />, href: "https://linkedin.com", label: "LinkedIn", external: true },
-    { icon: <FaTwitter size={17} />, href: "https://twitter.com", label: "Twitter", external: true },
-    { icon: <FiMail size={17} />, href: "mailto:jacksonkawawa31@gmail.com", label: "Email", external: false },
-  ];
-
   return (
-    <section id="about" aria-labelledby="hero-title" className="relative min-h-screen flex items-center overflow-hidden">
-      <canvas aria-hidden="true" ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-55 z-0" />
-      
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-24 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left side - Text content */}
+    <section
+      ref={sectionRef}
+      id="about"
+      aria-labelledby="hero-title"
+      className="relative flex min-h-[100svh] items-center overflow-hidden"
+    >
+      {/* Decorative background */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        <canvas
+          ref={canvasRef}
+          className="pointer-events-none h-full w-full opacity-55"
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-24 pt-28 sm:px-6 lg:pb-16">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* ---------------- Text column ---------------- */}
           <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            variants={container}
+            initial={prefersReducedMotion ? false : "hidden"}
+            animate="show"
+            className="text-center lg:text-left"
           >
-            {/* Tag pill */}
-            <div
-              className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-glow)/0.2)] bg-[hsl(var(--accent-glow)/0.08)] px-3 py-1 mb-6"
+            {/* Availability */}
+            <motion.div
+              variants={item}
+              className="mb-6 flex justify-center lg:justify-start"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--accent-glow))]" />
-              <span className="font-mono text-[0.65rem] text-[hsl(var(--accent-glow))] tracking-wider">Available for opportunities</span>
-            </div>
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-[hsl(var(--accent-glow)/0.25)] bg-[hsl(var(--accent-glow)/0.08)] px-3.5 py-1.5">
+                <span className="relative flex h-2 w-2" aria-hidden="true">
+                  {!prefersReducedMotion && (
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--accent-glow))] opacity-60" />
+                  )}
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(var(--accent-glow))]" />
+                </span>
+                <span className="text-sm font-medium text-[hsl(var(--accent-glow))]">
+                  Open to new opportunities
+                </span>
+              </div>
+            </motion.div>
 
-            {/* Animated scrolling name */}
-            <div className="mb-4">
-              <h1 id="hero-title" className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
-                <span className="gradient-text">JACKSON KAWAWA</span>
-              </h1>
-            </div>
+            {/* Name */}
+            <motion.h1
+              variants={item}
+              id="hero-title"
+              className="mb-4 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl"
+            >
+              <span className="block text-lg font-medium text-gray-600 dark:text-gray-300 sm:text-xl">
+                Hi, I&apos;m
+              </span>
+              <span className="gradient-text">Jackson Kawawa</span>
+            </motion.h1>
 
-            {/* Typewriter */}
-            <div className="mb-6 flex min-h-8 flex-wrap items-center gap-x-1.5">
-              <span className="sr-only">Full-Stack Engineer, Mobile Developer, API Architect, and REST API Design and Integration</span>
-              <span aria-hidden="true" className="font-mono text-sm text-gray-500 dark:text-gray-400">~/</span>
-              <span aria-hidden="true" ref={roleRef} className="font-mono text-sm font-semibold gradient-text-cv sm:text-base" />
-              {!prefersReducedMotion && <span aria-hidden="true" className="font-mono text-[hsl(var(--accent-glow))] text-base animate-pulse">▊</span>}
-            </div>
+            {/* Typewriter role */}
+            <motion.div
+              variants={item}
+              className="mb-6 flex min-h-9 flex-wrap items-center justify-center gap-x-1 lg:justify-start"
+            >
+              <span className="sr-only">{ROLES.join(", ")}</span>
+              <span
+                aria-hidden="true"
+                className="font-mono text-base text-gray-500 dark:text-gray-400 sm:text-lg"
+              >
+                ~/
+              </span>
+              <span
+                aria-hidden="true"
+                ref={roleRef}
+                className="gradient-text-cv font-mono text-lg font-semibold sm:text-xl"
+              />
+              {!prefersReducedMotion && (
+                <span
+                  aria-hidden="true"
+                  className="animate-pulse font-mono text-lg text-[hsl(var(--accent-glow))] sm:text-xl"
+                >
+                  ▊
+                </span>
+              )}
+            </motion.div>
 
             {/* Description */}
-            <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-lg mb-10 leading-relaxed">
-              I&apos;m a software engineer who builds <span className="font-semibold text-[hsl(var(--accent-glow))]">scalable REST APIs</span>, responsive web interfaces, and <span className="font-semibold text-[hsl(var(--accent-glow))]">cross-platform mobile apps</span> — from database design to deployment.
-            </p>
+            <motion.p
+              variants={item}
+              className="mx-auto mb-9 max-w-xl text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg lg:mx-0"
+            >
+              I build{" "}
+              <span className="font-semibold text-[hsl(var(--accent-glow))]">
+                scalable REST APIs
+              </span>
+              , responsive web apps, and{" "}
+              <span className="font-semibold text-[hsl(var(--accent-glow))]">
+                cross-platform mobile apps
+              </span>
+              , from database design to deployment.
+            </motion.p>
 
-            <div className="flex flex-wrap gap-3 mb-11">
-              <a className="btn-primary" href="#projects">
-                View My Work <span className="text-lg">→</span>
+            {/* Calls to action: one primary, one secondary */}
+            <motion.div
+              variants={item}
+              className="mb-10 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center lg:justify-start"
+            >
+              <a
+                className={`btn-primary group justify-center ${focusRing}`}
+                href="#projects"
+              >
+                View my projects
+                <FiArrowRight
+                  aria-hidden="true"
+                  className="transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+                />
               </a>
-              <a className="btn-ghost" href="#contact">
-                Get in Touch
+              <a
+                className={`btn-ghost justify-center ${focusRing}`}
+                href="#contact"
+              >
+                Contact me
               </a>
-            </div>
+            </motion.div>
 
-            <nav aria-label="Social and contact links" className="flex gap-2">
-              {socials.map((s) => (
-                <motion.a
-                  key={s.label}
-                  href={s.href}
-                  target={s.external ? "_blank" : undefined}
-                  rel={s.external ? "noreferrer" : undefined}
-                  aria-label={s.external ? `${s.label} (opens in a new tab)` : s.label}
-                  whileHover={prefersReducedMotion ? undefined : { y: -3, scale: 1.1 }}
-                  whileTap={prefersReducedMotion ? undefined : { scale: 0.92 }}
-                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--surface)] border border-[hsl(var(--border))] text-gray-500 dark:text-gray-400 hover:border-[hsl(var(--accent-glow))] hover:text-[hsl(var(--accent-glow))] transition-colors"
-                >
-                  {s.icon}
-                </motion.a>
-              ))}
-            </nav>
+            {/* Social links: icon + visible label, 44px touch targets */}
+            <motion.nav variants={item} aria-label="Social and contact links">
+              <ul className="flex flex-wrap justify-center gap-2.5 lg:justify-start">
+                {SOCIALS.map(({ label, href, icon: Icon, external }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noopener noreferrer" : undefined}
+                      aria-label={
+                        external
+                          ? `${label} (opens in a new tab)`
+                          : `Send an ${label.toLowerCase()}`
+                      }
+                      className={`inline-flex h-11 items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[var(--surface)] px-3.5 text-sm font-medium text-gray-600 transition-colors hover:border-[hsl(var(--accent-glow))] hover:text-[hsl(var(--accent-glow))] dark:text-gray-300 motion-reduce:transition-none ${focusRing}`}
+                    >
+                      <Icon aria-hidden="true" size={16} />
+                      <span>{label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </motion.nav>
           </motion.div>
 
-          {/* Right side - Profile Image */}
+          {/* ---------------- Profile image ---------------- */}
           <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{
+              duration: 0.7,
+              delay: 0.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="flex justify-center"
           >
-            <ProfileImage />
+            <div className="w-full max-w-[18rem] sm:max-w-sm lg:max-w-none">
+              <ProfileImage />
+            </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll cue */}
+      {/* Scroll cue: hidden on short screens where it would overlap content */}
       <motion.a
         href="#skills"
         initial={prefersReducedMotion ? false : { opacity: 0 }}
-        animate={prefersReducedMotion ? undefined : { opacity: 1, y: [0, 6, 0] }}
-        transition={{ opacity: { delay: 1.5 }, y: { delay: 2, duration: 1.8, repeat: Infinity } }}
+        animate={
+          prefersReducedMotion ? undefined : { opacity: 1, y: [0, 6, 0] }
+        }
+        transition={{
+          opacity: { delay: 1.5 },
+          y: { delay: 2, duration: 1.8, repeat: 3 }, // bounces a few times, then rests
+        }}
         aria-label="Scroll to skills"
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 rounded p-2"
+        className={`absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 rounded-lg p-2 text-gray-600 hover:text-[hsl(var(--accent-glow))] dark:text-gray-400 md:flex [@media(max-height:700px)]:hidden ${focusRing}`}
       >
-        <span className="font-mono text-[0.6rem] tracking-widest text-gray-500 dark:text-gray-500">SCROLL</span>
-        <FiArrowDown aria-hidden="true" size={13} className="text-gray-500 dark:text-gray-500" />
+        <span className="text-xs font-medium">Skills</span>
+        <FiArrowDown aria-hidden="true" size={14} />
       </motion.a>
     </section>
   );

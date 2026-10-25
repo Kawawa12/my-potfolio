@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FiGithub, FiMail, FiArrowDown } from "react-icons/fi";
 import { FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import ProfileImage from "./ProfileImage";
@@ -15,9 +15,14 @@ const ROLES = [
 export default function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const roleRef = useRef<HTMLSpanElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Typewriter effect
   useEffect(() => {
+    if (prefersReducedMotion) {
+      if (roleRef.current) roleRef.current.textContent = ROLES[0];
+      return;
+    }
+
     let roleIdx = 0, charIdx = 0, deleting = false, timeout: ReturnType<typeof setTimeout>;
     const type = () => {
       const word = ROLES[roleIdx];
@@ -43,10 +48,10 @@ export default function HeroSection() {
     };
     timeout = setTimeout(type, 600);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [prefersReducedMotion]);
 
-  // Particle canvas
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -103,94 +108,85 @@ export default function HeroSection() {
       cancelAnimationFrame(id);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   const socials = [
-    { icon: <FiGithub size={17} />, href: "https://github.com/Kawawa12", label: "GitHub" },
-    { icon: <FaLinkedinIn size={17} />, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: <FaTwitter size={17} />, href: "https://twitter.com", label: "Twitter" },
-    { icon: <FiMail size={17} />, href: "mailto:jacksonkawawa31@gmail.com", label: "Email" },
+    { icon: <FiGithub size={17} />, href: "https://github.com/Kawawa12", label: "GitHub", external: true },
+    { icon: <FaLinkedinIn size={17} />, href: "https://linkedin.com", label: "LinkedIn", external: true },
+    { icon: <FaTwitter size={17} />, href: "https://twitter.com", label: "Twitter", external: true },
+    { icon: <FiMail size={17} />, href: "mailto:jacksonkawawa31@gmail.com", label: "Email", external: false },
   ];
 
   return (
-    <section id="about" className="relative min-h-screen flex items-center overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-55 z-0" />
+    <section id="about" aria-labelledby="hero-title" className="relative min-h-screen flex items-center overflow-hidden">
+      <canvas aria-hidden="true" ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-55 z-0" />
       
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-16">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-24 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Tag pill */}
             <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[hsl(var(--accent-glow)/0.08)] border border-[hsl(var(--accent-glow)/0.2)] mb-7"
+              className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent-glow)/0.2)] bg-[hsl(var(--accent-glow)/0.08)] px-3 py-1 mb-6"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--accent-glow))]" />
-              <span className="font-mono text-[0.7rem] text-[hsl(var(--accent-glow))] tracking-wider">Available for opportunities</span>
+              <span className="font-mono text-[0.65rem] text-[hsl(var(--accent-glow))] tracking-wider">Available for opportunities</span>
             </div>
 
             {/* Animated scrolling name */}
             <div className="mb-4">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+              <h1 id="hero-title" className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
                 <span className="gradient-text">JACKSON KAWAWA</span>
               </h1>
             </div>
 
             {/* Typewriter */}
-            <div className="h-8 flex items-center gap-1.5 mb-6">
-              <span className="font-mono text-sm sm:text-base text-gray-500 dark:text-gray-400">~/</span>
-              <span ref={roleRef} className="font-mono text-sm sm:text-base font-semibold gradient-text-cv" />
-              <span className="font-mono text-[hsl(var(--accent-glow))] text-base animate-pulse">▊</span>
+            <div className="mb-6 flex min-h-8 flex-wrap items-center gap-x-1.5">
+              <span className="sr-only">Full-Stack Engineer, Mobile Developer, API Architect, and REST API Design and Integration</span>
+              <span aria-hidden="true" className="font-mono text-sm text-gray-500 dark:text-gray-400">~/</span>
+              <span aria-hidden="true" ref={roleRef} className="font-mono text-sm font-semibold gradient-text-cv sm:text-base" />
+              {!prefersReducedMotion && <span aria-hidden="true" className="font-mono text-[hsl(var(--accent-glow))] text-base animate-pulse">▊</span>}
             </div>
 
             {/* Description */}
             <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-lg mb-10 leading-relaxed">
-              I build <span className="text-[hsl(var(--accent-glow))] font-semibold">scalable REST APIs</span>,
-              reactive UIs, and <span className="text-[hsl(var(--accent-glow))] font-semibold">cross-platform mobile apps</span>
-              — from database to deployment.
+              I&apos;m a software engineer who builds <span className="font-semibold text-[hsl(var(--accent-glow))]">scalable REST APIs</span>, responsive web interfaces, and <span className="font-semibold text-[hsl(var(--accent-glow))]">cross-platform mobile apps</span> — from database design to deployment.
             </p>
 
-            {/* CTA buttons */}
             <div className="flex flex-wrap gap-3 mb-11">
-              <button
-                className="btn-primary"
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              >
+              <a className="btn-primary" href="#projects">
                 View My Work <span className="text-lg">→</span>
-              </button>
-              <button
-                className="btn-ghost"
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              >
+              </a>
+              <a className="btn-ghost" href="#contact">
                 Get in Touch
-              </button>
+              </a>
             </div>
 
-            {/* Socials */}
-            <div className="flex gap-2">
-              {socials.map((s, i) => (
+            <nav aria-label="Social and contact links" className="flex gap-2">
+              {socials.map((s) => (
                 <motion.a
                   key={s.label}
                   href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.label}
-                  whileHover={{ y: -3, scale: 1.1 }}
-                  whileTap={{ scale: 0.92 }}
+                  target={s.external ? "_blank" : undefined}
+                  rel={s.external ? "noreferrer" : undefined}
+                  aria-label={s.external ? `${s.label} (opens in a new tab)` : s.label}
+                  whileHover={prefersReducedMotion ? undefined : { y: -3, scale: 1.1 }}
+                  whileTap={prefersReducedMotion ? undefined : { scale: 0.92 }}
                   className="w-10 h-10 rounded-xl flex items-center justify-center bg-[var(--surface)] border border-[hsl(var(--border))] text-gray-500 dark:text-gray-400 hover:border-[hsl(var(--accent-glow))] hover:text-[hsl(var(--accent-glow))] transition-colors"
                 >
                   {s.icon}
                 </motion.a>
               ))}
-            </div>
+            </nav>
           </motion.div>
 
           {/* Right side - Profile Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="flex justify-center"
@@ -201,16 +197,17 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 6, 0] }}
+      <motion.a
+        href="#skills"
+        initial={prefersReducedMotion ? false : { opacity: 0 }}
+        animate={prefersReducedMotion ? undefined : { opacity: 1, y: [0, 6, 0] }}
         transition={{ opacity: { delay: 1.5 }, y: { delay: 2, duration: 1.8, repeat: Infinity } }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer"
-        onClick={() => document.getElementById("skills")?.scrollIntoView({ behavior: "smooth" })}
+        aria-label="Scroll to skills"
+        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 rounded p-2"
       >
         <span className="font-mono text-[0.6rem] tracking-widest text-gray-500 dark:text-gray-500">SCROLL</span>
-        <FiArrowDown size={13} className="text-gray-500 dark:text-gray-500" />
-      </motion.div>
+        <FiArrowDown aria-hidden="true" size={13} className="text-gray-500 dark:text-gray-500" />
+      </motion.a>
     </section>
   );
 }
